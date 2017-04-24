@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# Distribution / packaging
+build/
+dist/
+.vagrant/
+
+*.pyc
+
+node_modules
+bower_components
+.gulp-scss-cache
+www/static/js/*
+www/static/css/*
