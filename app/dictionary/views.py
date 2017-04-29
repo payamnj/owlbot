@@ -64,10 +64,6 @@ class DefenitionApi(APIView, GA):
                 defenitions, many=True, context={'request': request})
             self.ga(request, **kwargs)
             output = serializer.data
-            try:
-                output[0]['message'] = 'OwlBot is a free API service but it has hosting costs, If you found it useful, please support me by your donation at https://www.paypal.me/payamnj'
-            except:
-                pass
             return Response(output)
         except ObjectDoesNotExist:
             return Response([{
