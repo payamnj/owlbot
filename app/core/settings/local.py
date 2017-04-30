@@ -16,14 +16,6 @@ DATABASES = {
         'PASSWORD': get_env_variable('DB_PASSWORD'),
         'HOST': get_env_variable('DB_HOST'),
         'PORT': '',
-    },
-    'anki': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'anki',
-        'USER': get_env_variable('DB_USER'),
-        'PASSWORD': get_env_variable('DB_PASSWORD'),
-        'HOST': get_env_variable('DB_HOST'),
-        'PORT': '',
     }
 }
 
