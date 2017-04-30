@@ -20,7 +20,6 @@ DATABASES = {
 }
 
 INSTALLED_APPS += (
-    'app.local_scripts',
     'debug_toolbar',
 )
 
