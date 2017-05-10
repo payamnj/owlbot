@@ -5,7 +5,7 @@ from .utils import get_env_variable
 SECRET_KEY = get_env_variable('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 THUMBNAIL_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['www.owlbot.info', 'owlbot.info', 'gcp.owlbot.info']
