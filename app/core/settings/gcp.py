@@ -1,6 +1,5 @@
 from .settings import *
 from .utils import get_env_variable
-import sys
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_env_variable('DJANGO_SECRET_KEY')
@@ -9,20 +8,6 @@ SECRET_KEY = get_env_variable('DJANGO_SECRET_KEY')
 DEBUG = True
 THUMBNAIL_DEBUG = DEBUG
 
-sys.path.insert(0, os.path.join(BASE_DIR, 'app'))
-
-INSTALLED_APPS = (
-    'core',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'dictionary',
-    'local_scripts',
-    'rest_framework',
-)
 ALLOWED_HOSTS = ['www.owlbot.info', 'owlbot.info', 'gcp.owlbot.info']
 
 
