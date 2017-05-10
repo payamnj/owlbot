@@ -8,6 +8,8 @@ SECRET_KEY = get_env_variable('DJANGO_SECRET_KEY')
 DEBUG = True
 THUMBNAIL_DEBUG = DEBUG
 
+sys.path.insert(0, os.path.join(BASE_DIR, 'app'))
+
 INSTALLED_APPS = (
     'core',
     'django.contrib.admin',
