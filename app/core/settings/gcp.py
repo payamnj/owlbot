@@ -8,6 +8,18 @@ SECRET_KEY = get_env_variable('DJANGO_SECRET_KEY')
 DEBUG = True
 THUMBNAIL_DEBUG = DEBUG
 
+INSTALLED_APPS = (
+    'core',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'dictionary',
+    'local_scripts',
+    'rest_framework',
+)
 ALLOWED_HOSTS = ['www.owlbot.info', 'owlbot.info', 'gcp.owlbot.info']
 
 
