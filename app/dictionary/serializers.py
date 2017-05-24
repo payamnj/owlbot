@@ -4,7 +4,9 @@ import models
 
 
 class DefenitionSerializer(serializers.ModelSerializer):
+    
+    test_field = 'test'
 
     class Meta:
         model = models.Defenition
-        fields = ('type', 'defenition', 'example')
+        fields = ('type', 'defenition', 'example', 'test_field')
