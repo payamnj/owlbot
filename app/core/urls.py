@@ -14,7 +14,7 @@ api_v1_urlpatterns = [
 urlpatterns = [
     url(r'^joghdadmin/', include(admin.site.urls)),
     url(r'^/?$', dictionary_views.Home.as_view()),
-    url(r'^api/v1/', include(api_v1_urlpatterns)),
+    url(r'^api/v[12]/', include(api_v1_urlpatterns))
 ]
 
 if settings.DEBUG:
