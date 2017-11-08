@@ -49,10 +49,10 @@ class Home(RedirectView):
     url = '/api/v2/dictionary/owl'
 
 
-class DefenitionApi(APIView, GA):
+class DefinitionApi(APIView, GA):
 
     def get_serializer_class(self):
-        if '/v1/' in self.request.url:
+        if '/v1/' in self.request.path:
             return serializers.DefenitionSerializer
         return serializers.DefinitionSerializer
 
@@ -63,7 +63,7 @@ class DefenitionApi(APIView, GA):
                 'published': True
             })
 
-            serializer = self.serializer_class(
+            serializer = self.get_serializer_class()(
                 defenitions, many=True, context={'request': request})
             self.ga(request, **kwargs)
             output = serializer.data
