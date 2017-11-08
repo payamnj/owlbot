@@ -46,12 +46,15 @@ class GA(object):
 
 
 class Home(RedirectView):
-    url = '/api/v1/dictionary/owl'
+    url = '/api/v2/dictionary/owl'
 
 
 class DefenitionApi(APIView, GA):
 
-    serializer_class = serializers.DefenitionSerializer
+    def get_serializer_class(self):
+        if '/v1/' in self.request.url:
+            return serializers.DefenitionSerializer
+        return serializers.DefinitionSerializer
 
     def get(self, request, format=None, **kwargs):
         try:
