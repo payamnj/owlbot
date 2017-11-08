@@ -2,12 +2,12 @@
 
 OwlBot is a free online information API. At the moment, the only available database on owlbot is an English dictionary but my aim is to expand it and serve other kinds of information through it.
 
-API URL: `https://owlbot.info/api/v1/dictionary/<word>`
+API URL: `https://owlbot.info/api/v2/dictionary/<word>`
 
 The response is a list of word objects.
 
 ```
-Sample response for GET /api/v1/dictionary/live
+Sample response for GET /api/v2/dictionary/live
 
 [
     {
