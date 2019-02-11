@@ -29,7 +29,7 @@ class GA(object):
         post_data = [
             ('v', '1'),
             ('tid', 'UA-80200867-1'),
-            ('cid', '555'),
+            ('cid', get_client_ip(request)),
             ('t', 'pageview'),
             ('dp', '/api/v1/dictionary/%s' % kwargs['word']),
             ('dt', 'Dictionary Api (%s)' % kwargs['word']),
