@@ -31,7 +31,7 @@ class GA(object):
             ('tid', 'UA-80200867-1'),
             ('cid', get_client_ip(request)),
             ('t', 'pageview'),
-            ('dp', '/api/v1/dictionary/%s' % kwargs['word']),
+            ('dp', str(request.path)),
             ('dt', 'Dictionary Api (%s)' % kwargs['word']),
             ('uip', get_client_ip(request)),
             ('ua', get_user_agent(request))
