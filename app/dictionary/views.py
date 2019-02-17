@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic.base import RedirectView
 from app.dictionary import models
 from app.dictionary import serializers
-import urllib2, urllib
+import requests
 
 
 def get_client_ip(request):
@@ -26,23 +26,18 @@ def get_user_agent(request):
 class GA(object):
 
     def ga(self, request, **kwargs):
-        post_data = [
-            ('v', '1'),
-            ('tid', 'UA-80200867-1'),
-            ('cid', get_client_ip(request)),
-            ('t', 'pageview'),
-            ('dp', str(request.path)),
-            ('dt', 'Dictionary Api (%s)' % kwargs['word']),
-            ('uip', get_client_ip(request)),
-            ('ua', get_user_agent(request))
-        ]
-        resp = urllib2.urlopen(
-            'https://www.google-analytics.com/collect',
-            urllib.urlencode(post_data)
-        )
+        post_data = {
+            'v': '1',
+            'tid': 'UA-80200867-1',
+            'cid': get_client_ip(request),
+            't': 'pageview',
+            'dp': str(request.path),
+            'dt': 'Dictionary Api (%s)' % kwargs['word'],
+            'uip': get_client_ip(request),
+            'ua': get_user_agent(request)
+        }
 
-        content = resp.read()
-        print(content)
+        requests.post('https://www.google-analytics.com/collect', data=post_data, timeout=2)
 
 
 class Home(RedirectView):
