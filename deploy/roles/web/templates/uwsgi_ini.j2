@@ -1,0 +1,26 @@
+# mysite_uwsgi.ini file
+[uwsgi]
+
+# Django-related settings
+# the base directory (full path)
+chdir           = {{ django_dir }}
+# Django's wsgi file
+module          = app.core.wsgi:application
+# the virtualenv (full path)
+home            = {{ virtualenv_path }}
+
+# process-related settings
+# master
+master          = true
+# maximum number of worker processes
+processes       = 2
+# the socket (use the full path to be safe
+socket          = {{ virtualenv_path }}/run/uwsgi.sock
+# ... with appropriate permissions - may be needed
+chmod-socket    = 666
+# clear environment on exit
+vacuum          = true
+logto           = {{ application_log_dir }}/uwsgi/uwsgi-error.log
+buffer-size     = 32768
+plugin=python   = python
+die-on-term     = true

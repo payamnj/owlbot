@@ -1,0 +1,24 @@
+---
+
+update_apt_cache: yes
+application_log_dir: "{{ virtualenv_path }}/logs"
+
+# Django
+run_django_migrate: yes
+run_django_collectstatic: yes
+
+# Git
+git_repo: "git@github.com:payamnj/owlbot.git"
+git_root: "{{ virtualenv_path }}/{{ application_name }}"
+setup_git_repo: yes
+
+# Nginx
+nginx_server_name: localhost
+nginx_http_port: 80
+nginx_https_port: 443
+nginx_access_log_file: "{{ application_log_dir }}/nginx/nginx_access.log"
+nginx_error_log_file: "{{ application_log_dir }}/nginx/nginx_error.log"
+nginx_static_dir: "{{ git_root }}/static/"
+nginx_media_dir: "{{ git_root }}/media/"
+
+...
