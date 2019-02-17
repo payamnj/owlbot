@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-import models
+from app.dictionary import models
 
 
 class DefenitionSerializer(serializers.ModelSerializer):

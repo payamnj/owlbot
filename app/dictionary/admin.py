@@ -1,5 +1,5 @@
 from django.contrib import admin
-import models
+from app.dictionary import models
 
 
 class DefenitionInline(admin.StackedInline):

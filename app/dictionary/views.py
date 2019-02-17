@@ -2,8 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic.base import RedirectView
-import models
-import serializers
+from app.dictionary import models
+from app.dictionary import serializers
 import urllib2, urllib
 
 
