@@ -9,7 +9,7 @@ class Word(models.Model):
 
 
 class Defenition(models.Model):
-    word = models.ForeignKey(Word, related_name='defenition')
+    word = models.ForeignKey(Word, related_name='defenition', on_delete=models.CASCADE)
     type = models.CharField(max_length=50, null=True)
     defenition = models.TextField(default='')
     synonyms = models.ManyToManyField(Word, related_name='synonyms')
