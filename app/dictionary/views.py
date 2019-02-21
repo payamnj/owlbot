@@ -42,9 +42,7 @@ class GA(object):
 
 
 class Home(RedirectView):
-    rand_num = random.randint(0, 100744)
-    rand_word = models.Word.objects.all()[rand_num:1]
-    url = '/api/v2/dictionary/{}'.format(rand_word.first().word)
+    url = '/api/v2/dictionary/owl'
 
 
 class DefinitionApi(APIView, GA):
