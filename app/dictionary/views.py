@@ -1,7 +1,9 @@
+from django.http import HttpResponseRedirect
+from django.http.response import HttpResponseRedirectBase
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic.base import RedirectView
+from django.views.generic import View
 from app.dictionary import models
 from app.dictionary import serializers
 import random
@@ -41,10 +43,17 @@ class GA(object):
         requests.post('https://www.google-analytics.com/collect', data=post_data, timeout=2)
 
 
-class Home(RedirectView):
-    rand_num = random.randint(0, 100744)
-    rand_word = models.Word.objects.all()[rand_num]
-    url = '/api/v2/dictionary/{}'.format(rand_word.word)
+class HttpResponseRedirectTemp(HttpResponseRedirectBase):
+    status_code = 307
+
+
+class Home(View):
+
+    def get(self, request):
+        rand_num = random.randint(0, 100744)
+        rand_word = models.Word.objects.all()[rand_num]
+        url = '/api/v2/dictionary/{}'.format(rand_word.word)
+        return HttpResponseRedirectTemp(url)
 
 
 class DefinitionApi(APIView, GA):
