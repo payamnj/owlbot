@@ -56,4 +56,58 @@
 - name: Add the application user to the application group
   user: name={{ application_user }} group={{ application_group }} state=present
 
+- name: Check if splunk file is already downloaded
+  stat:
+    path: /home/{{ application_user }}/splunk-7.2.4-8a94541dcfac-Linux-x86_64.tgz
+  register: splunk_downloaded
+  tags:
+    - splunk
+
+- name: Download Splunk File
+  become: yes
+  become_user: '{{ application_user }}'
+  when: splunk_downloaded.stat.exists == False
+  get_url:
+    url: '{{ splunk_tar_url }}'
+    dest: /home/{{ application_user }}/
+    owner: '{{ application_user }}'
+  tags:
+    - splunk
+
+- name: Make sure opt folder exists
+  file:
+    path: /home/{{ application_user }}/opt
+    state: directory
+    owner: '{{ application_user }}'
+  tags:
+    - splunk
+
+- name: Extract splunk tar file
+  become: yes
+  become_user: '{{ application_user }}'
+  unarchive:
+    src: /home/{{ application_user }}/splunk-7.2.4-8a94541dcfac-Linux-x86_64.tgz
+    dest: /home/{{ application_user }}/opt/
+    remote_src: yes
+  tags:
+    - splunk
+
+- name: Create splunk admin credentials
+  become: yes
+  become_user: '{{ application_user }}'
+  template:
+    src: splunk_admin.j2
+    dest:  /home/{{ application_user }}/opt/splunk/etc/system/local/user-seed.conf
+  tags:
+    - splunk
+
+- name: Start splunk
+  become: yes
+  become_user: '{{ application_user }}'
+  command: chdir=/home/{{ application_user }}/opt/splunk/bin {{ item }}
+  with_items:
+    - ./splunk stop
+    - ./splunk start --accept-license --answer-yes
+  tags:
+    - splunk
 ...

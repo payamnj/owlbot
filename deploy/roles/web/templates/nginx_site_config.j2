@@ -27,6 +27,9 @@ server {
         alias   {{ nginx_media_dir }};
     }
 
+    location ~ ^(.*)?/splunk/ {
+        proxy_pass http://127.0.0.1:8000;
+    }
 
     location / {
         if (-f {{ virtualenv_path }}/maintenance_on.html) {
