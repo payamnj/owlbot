@@ -69,7 +69,7 @@ class DefinitionApi(APIView, GA):
 
     def get(self, request, format=None, **kwargs):
         try:
-            defenitions = models.Defenition.objects.get(**{
+            defenitions = models.Defenition.objects.filter(**{
                 'word__word': kwargs['word'],
                 'published': True
             })
@@ -78,7 +78,6 @@ class DefinitionApi(APIView, GA):
                 defenitions, many=True, context={'request': request})
             self.ga(request, **kwargs)
             output = serializer.data
-            logging.info('load')
             return Response(output)
         except ObjectDoesNotExist:
             return Response([{
