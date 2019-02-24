@@ -4,7 +4,7 @@ from django.db import models
 class Word(models.Model):
     word = models.CharField(max_length=200, null=True, unique=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.word
 
 
@@ -16,5 +16,5 @@ class Defenition(models.Model):
     example = models.TextField(null=True)
     published = models.BooleanField(default=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return '%d- %s(%s)' % (self.id, self.word.word, self.type)
