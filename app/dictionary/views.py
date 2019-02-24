@@ -1,5 +1,3 @@
-from django.http import HttpResponseRedirect
-from sentry_sdk import capture_exception
 from django.http.response import HttpResponseRedirectBase
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,6 +7,7 @@ from app.dictionary import models
 from app.dictionary import serializers
 import random
 import requests
+import logging
 
 
 def get_client_ip(request):
@@ -57,7 +56,7 @@ class Home(View):
             url = '/api/v2/dictionary/{}'.format(rand_word.word)
             return HttpResponseRedirectTemp(url)
         except Exception as e:
-            capture_exception(e)
+            logging.exception(str(e))
             raise e
 
 
@@ -70,7 +69,7 @@ class DefinitionApi(APIView, GA):
 
     def get(self, request, format=None, **kwargs):
         try:
-            defenitions = models.Defenition.objects.filter(**{
+            defenitions = models.Defenition.objects.get(**{
                 'word__word': kwargs['word'],
                 'published': True
             })
@@ -79,10 +78,11 @@ class DefinitionApi(APIView, GA):
                 defenitions, many=True, context={'request': request})
             self.ga(request, **kwargs)
             output = serializer.data
+            logging.info('load')
             return Response(output)
         except ObjectDoesNotExist:
             return Response([{
-                'result': '0', 'message': 'No defenition :('}])
+                'message': 'No definition :('}], status=404)
         except Exception as e:
-            capture_exception(e)
+            logging.exception(str(e), extra={'word': kwargs.get('word')})
             raise e
