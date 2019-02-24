@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from app.dictionary import views as dictionary_views
 from django.urls import path
-from django.views.decorators.cache import never_cache
+
 
 api_v1_urlpatterns = [
     url(r'^dictionary/(?P<word>[\w\d]+)/?$',
@@ -14,7 +14,7 @@ api_v2_urlpatterns = api_v1_urlpatterns
 
 urlpatterns = [
     path('joghdadmin/', admin.site.urls),
-    url(r'^$', never_cache(dictionary_views.Home.as_view())),
+    url(r'^$', dictionary_views.Home.as_view()),
     url(r'^api/v1/', include(api_v1_urlpatterns)),
     url(r'^api/v2/', include(api_v2_urlpatterns))
 ]
