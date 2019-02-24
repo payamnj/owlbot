@@ -187,11 +187,6 @@
             dest=/etc/nginx/sites-available/{{ application_name }}
             backup=yes
 
-- name: Create the Nginx configuration file for splunk
-  template: src=splunk_nginx.j2
-            dest=/etc/nginx/sites-available/splunk.owlbot.info
-            backup=yes
-
 - name: Ensure that the default site is disabled
   command: rm /etc/nginx/sites-enabled/default
            removes=/etc/nginx/sites-enabled/default
@@ -200,11 +195,6 @@
   command: ln -s /etc/nginx/sites-available/{{ application_name }}
            /etc/nginx/sites-enabled/{{ application_name }}
            creates=/etc/nginx/sites-enabled/{{ application_name }}
-
-- name: Ensure that the splunk subdomain site is enabled
-  command: ln -s /etc/nginx/sites-available/splunk.owlbot.info
-           /etc/nginx/sites-enabled/splunk.owlbot.info
-           creates=/etc/nginx/sites-enabled/splunk.owlbot.info
 
 - name: Ensure Nginx service is started
   command: service nginx restart
