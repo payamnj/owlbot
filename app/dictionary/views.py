@@ -1,4 +1,5 @@
 from django.http import HttpResponseRedirect
+from sentry_sdk import capture_exception
 from django.http.response import HttpResponseRedirectBase
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -50,10 +51,14 @@ class HttpResponseRedirectTemp(HttpResponseRedirectBase):
 class Home(View):
 
     def get(self, request):
-        rand_num = random.randint(0, 100744)
-        rand_word = models.Word.objects.all()[rand_num]
-        url = '/api/v2/dictionary/{}'.format(rand_word.word)
-        return HttpResponseRedirectTemp(url)
+        try:
+            rand_num = random.randint(0, 100744)
+            rand_word = models.Word.objects.all()[rand_num]
+            url = '/api/v2/dictionary/{}'.format(rand_word.word)
+            return HttpResponseRedirectTemp(url)
+        except Exception as e:
+            capture_exception(e)
+            raise e
 
 
 class DefinitionApi(APIView, GA):
@@ -78,3 +83,6 @@ class DefinitionApi(APIView, GA):
         except ObjectDoesNotExist:
             return Response([{
                 'result': '0', 'message': 'No defenition :('}])
+        except Exception as e:
+            capture_exception(e)
+            raise e
