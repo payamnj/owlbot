@@ -29,6 +29,11 @@ def get_user_agent(request):
 class GA(object):
 
     def ga(self, request, **kwargs):
+        if not request.user:
+            username = 'Anonymous'
+        else:
+            username = request.user.username
+
         post_data = {
             'v': '1',
             'tid': 'UA-80200867-1',
@@ -37,7 +42,8 @@ class GA(object):
             'dp': str(request.path),
             'dt': 'Dictionary Api (%s)' % kwargs['word'],
             'uip': get_client_ip(request),
-            'ua': get_user_agent(request)
+            'ua': get_user_agent(request),
+            'dimension1': username,
         }
 
         requests.post('https://www.google-analytics.com/collect', data=post_data, timeout=2)
