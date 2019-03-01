@@ -29,7 +29,7 @@ def get_user_agent(request):
 class GA(object):
 
     def ga(self, request, **kwargs):
-        if not request.user:
+        if not request.user.username:
             username = 'Anonymous'
         else:
             username = request.user.username
