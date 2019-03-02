@@ -16,6 +16,7 @@ api_v2_urlpatterns = api_v1_urlpatterns
 urlpatterns = [
     path('joghdadmin/', admin.site.urls),
     path('google582736430f609802.html', TemplateView.as_view(template_name='google582736430f609802.html')),
+    url(r'^$', TemplateView.as_view(template_name='index.html')),
     url(r'^$', dictionary_views.Home.as_view()),
     url(r'^api/v1/', include(api_v1_urlpatterns)),
     url(r'^api/v2/', include(api_v2_urlpatterns))
