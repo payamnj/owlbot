@@ -8,7 +8,7 @@ SECRET_KEY = get_env_variable('DJANGO_SECRET_KEY')
 DEBUG = False
 THUMBNAIL_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['www.owlbot.info', 'owlbot.info', 'gcp.owlbot.info']
+ALLOWED_HOSTS = ['www.owlbot.info', 'owlbot.info', 'media.owlbot.info']
 
 
 DATABASES = {
