@@ -43,7 +43,7 @@ class GA(object):
             'dt': 'Dictionary Api (%s)' % kwargs['word'],
             'uip': get_client_ip(request),
             'ua': get_user_agent(request),
-            'dimension1': username,
+            'cd1': username,
         }
 
         requests.post('https://www.google-analytics.com/collect', data=post_data, timeout=2)
