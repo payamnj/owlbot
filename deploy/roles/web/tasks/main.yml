@@ -130,6 +130,22 @@
             group=root
             mode=0644
 
+# Google service account for storage
+- name: Make sure secrets directory exists
+  file:
+    path: /secrets
+    state: directory
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+
+- name: Create service account credentional file
+  template:
+    src: service_account.j2
+    dest: '/secrets/service-account.json'
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+
+
 # Setup Django app
 
 - name: Install packages required by the Django app inside virtualenv
