@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sentry_sdk
+from google.oauth2 import service_account
 
 from .utils import get_env_variable
 
@@ -49,6 +50,7 @@ INSTALLED_APPS = (
     'app.local_scripts',
     'rest_framework',
     'rest_framework.authtoken',
+    'storages',
 )
 
 MIDDLEWARE = [
@@ -119,7 +121,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_BUCKET_NAME = 'media.owlbot.info'
+GS_PROJECT_ID = os.getenv('PROJECT_ID', '')
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    '/secrets/service-account.json')
+
 STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
+MEDIA_URL = 'https://media.owlbot.info/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')

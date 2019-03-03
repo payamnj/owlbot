@@ -79,9 +79,15 @@ class DefinitionApi(APIView, GA):
                 'word__word': kwargs['word'],
                 'published': True
             })
+            if request.user.is_authenticated:
 
-            serializer = self.get_serializer_class()(
-                defenitions, many=True, context={'request': request})
+                serializer = serializers.DictionarySerializer(
+                    {'word': kwargs['word'], 'pronunciation': defenitions.first().word.pronunciation,
+                     'definitions': list(defenitions)})
+            else:
+                serializer = self.get_serializer_class()(
+                    defenitions, many=True, context={'request': request})
+
             self.ga(request, **kwargs)
             output = serializer.data
             return Response(output)

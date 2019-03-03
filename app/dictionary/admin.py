@@ -14,4 +14,13 @@ class WordAdmin(admin.ModelAdmin):
         DefenitionInline,
     ]
 
+
+class DefinitionAdmin(admin.ModelAdmin):
+    list_filter = ['type', 'published']
+    list_display = ('word', 'defenition', 'published')
+    fields = ('defenition', 'image')
+    search_fields = ('defenition', )
+
+
 admin.site.register(models.Word, WordAdmin)
+admin.site.register(models.Defenition, DefinitionAdmin)
