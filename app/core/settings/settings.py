@@ -129,5 +129,4 @@ GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
 
 STATIC_URL = '/static/'
 MEDIA_URL = 'https://media.owlbot.info/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
