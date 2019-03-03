@@ -10,6 +10,7 @@ class DefenitionInline(admin.StackedInline):
 
 class WordAdmin(admin.ModelAdmin):
     search_fields = ['word', 'defenition__defenition']
+    list_display = ['word', 'pronunciation']
     inlines = [
         DefenitionInline,
     ]
