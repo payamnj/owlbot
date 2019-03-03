@@ -7,15 +7,18 @@ import requests
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        faild_list = []
+        offset = 0
         while True:
-            words = Word.objects.exclude(id__in=faild_list).filter(pronunciation__isnull=True)[:1000]
+            words = Word.objects.filter(pronunciation__isnull=True, tmp_checked=False).order_by('-id')[offset:][:100]
+            offset += 100
             if not words:
                 break
             for word in words:
                 print(word.word)
-                if not get_pronunciation(word):
-                    faild_list.append(word.id)
+                word = get_pronunciation(word)
+                word.tmp_checked = True
+                word.save()
+
 
 def get_pronunciation(word):
     try:
@@ -28,7 +31,7 @@ def get_pronunciation(word):
         p = spans[0].find('span').text
         print(p)
         word.pronunciation = p
-        word.save()
-        return True
+        return word
     except Exception:
-        return False
+        word.tmp_checked = True
+        return word
