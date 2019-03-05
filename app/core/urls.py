@@ -2,11 +2,10 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from app.dictionary import views as dictionary_views
 from django.urls import path
-from django.views.generic import TemplateView
 
 
 api_v1_urlpatterns = [
-    url(r'^dictionary/(?P<word>[\w\d]+)/?$',
+    url(r'^dictionary/(?P<word>[\w\d ]+)/?$',
         dictionary_views.DefinitionApi.as_view(),
         name='definition_api'),
 ]
