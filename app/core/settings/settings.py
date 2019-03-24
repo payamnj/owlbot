@@ -51,6 +51,8 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'storages',
+    'easy_thumbnails',
+    'image_cropping',
 )
 
 MIDDLEWARE = [
@@ -62,6 +64,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+from easy_thumbnails.conf import Settings as thumbnail_settings
+
+
+THUMBNAIL_PROCESSORS = (
+    'image_cropping.thumbnail_processors.crop_corners',
+) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
 ROOT_URLCONF = 'app.core.urls'
 
@@ -122,6 +131,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+THUMBNAIL_DEFAULT_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 GS_BUCKET_NAME = 'media.owlbot.info'
 GS_PROJECT_ID = os.getenv('PROJECT_ID', '')
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(

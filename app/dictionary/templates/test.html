@@ -1,0 +1,31 @@
+<html>
+<head>
+<style>
+    .ball {
+      width: 10px;
+      height: 10px;
+      background-color: #6ab4cc;
+      border-radius: 50%;
+
+      offset-path: path('M0,0 C50,150 150,0 200,200 q5,15 0,0 l3,3');
+      offset-distance: 0%;
+
+      animation: red-ball 1.6s linear forwards;
+    }
+
+    @keyframes red-ball {
+      from {
+        offset-distance: 0%;
+        opacity: 0;
+      }
+      to {
+        offset-distance: 100%;
+        opacity: 1;
+      }
+    }
+</style>
+</head>
+<body>
+<div class="ball"></div>
+</body>
+</html>

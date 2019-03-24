@@ -1,4 +1,7 @@
 from django.db import models
+from django.utils import timezone
+from django.contrib.auth.models import User
+from image_cropping import ImageRatioField
 
 
 class Word(models.Model):
@@ -15,9 +18,12 @@ class Defenition(models.Model):
     type = models.CharField(max_length=50, null=True)
     defenition = models.TextField(default='')
     synonyms = models.ManyToManyField(Word, related_name='synonyms')
-    example = models.TextField(null=True)
+    example = models.TextField(null=True, blank=True)
     published = models.BooleanField(default=True)
     image = models.ImageField(upload_to='dictionary/images', blank=True, null=True)
+    image_uploaded_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    image_uploaded_at = models.DateTimeField(null=True, blank=True)
+    cropping = ImageRatioField('image', '500x500')
 
     def __str__(self):
         return '%d- %s(%s)' % (self.id, self.word.word, self.type)
