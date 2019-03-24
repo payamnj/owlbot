@@ -40,9 +40,9 @@ class HasImage(admin.SimpleListFilter):
 
 class DefinitionAdmin(ImageCroppingMixin, admin.ModelAdmin):
     list_filter = ['type', 'published', HasImage]
-    list_display = ('word', 'defenition', 'published', 'has_image')
+    list_display = ('word', 'defenition', 'published', 'has_image', 'type')
     fields = ('defenition', 'image', 'type', 'example', 'cropping')
-    search_fields = ('defenition', )
+    search_fields = ('word__word', 'defenition', )
 
     def has_image(self, obj):
         return True if obj.image.name else False
