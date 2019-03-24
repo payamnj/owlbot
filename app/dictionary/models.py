@@ -27,3 +27,7 @@ class Defenition(models.Model):
 
     def __str__(self):
         return '%d- %s(%s)' % (self.id, self.word.word, self.type)
+
+    class Meta:
+        verbose_name_plural = 'Definitions'
+        verbose_name = 'Definition'
