@@ -3,9 +3,12 @@ cachetools==3.1.0
 certifi==2018.11.29
 chardet==3.0.4
 Django==2.1.7
+django-appconf==1.0.3
 django-debug-toolbar==1.4
+django-image-cropping==1.2.0
 django-storages==1.7.1
 djangorestframework==3.9.1
+easy-thumbnails==2.6
 google-api-core==1.8.0
 google-auth==1.6.3
 google-cloud-core==0.29.1
