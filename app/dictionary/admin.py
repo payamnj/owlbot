@@ -54,10 +54,16 @@ class DefinitionAdmin(ImageCroppingMixin, admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
     def get_fields(self, request, obj=None):
-        if not request.user.is_superuser:
-            return ['image', 'cropping']
+        if request.user.groups.filter(name='image_publisher').exists():
+            return ['image', 'cropping', 'defenition', 'type']
         else:
             return  ('defenition', 'image', 'type', 'example', 'cropping')
+
+    def get_readonly_fields(self, request, obj=None):
+        if request.user.groups.filter(name='image_publisher').exists():
+            return ['defenition', 'type']
+        else:
+            return []
 
 admin.site.register(models.Word, WordAdmin)
 admin.site.register(models.Defenition, DefinitionAdmin)
