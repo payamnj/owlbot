@@ -24,6 +24,7 @@ class Defenition(models.Model):
     image_uploaded_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     image_uploaded_at = models.DateTimeField(null=True, blank=True)
     cropping = ImageRatioField('image', '500x500')
+    image_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return '%d- %s(%s)' % (self.id, self.word.word, self.type)

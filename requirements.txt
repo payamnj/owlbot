@@ -18,7 +18,7 @@ googleapis-common-protos==1.5.8
 idna==2.8
 Pillow==5.4.1
 protobuf==3.7.0
-psycopg2==2.7
+psycopg2==2.7.7
 pyasn1==0.4.5
 pyasn1-modules==0.2.4
 pytz==2018.9

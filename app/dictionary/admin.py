@@ -57,7 +57,7 @@ class DefinitionAdmin(ImageCroppingMixin, admin.ModelAdmin):
         if request.user.groups.filter(name='image_publisher').exists():
             return ['image', 'cropping', 'defenition', 'type']
         else:
-            return  ('defenition', 'image', 'type', 'example', 'cropping')
+            return  ('defenition', 'image', 'type', 'example', 'cropping', 'image_approved')
 
     def get_readonly_fields(self, request, obj=None):
         if request.user.groups.filter(name='image_publisher').exists():
