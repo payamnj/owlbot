@@ -130,13 +130,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-THUMBNAIL_DEFAULT_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+DEFAULT_FILE_STORAGE = 'app.dictionary.gc-storage.OwlBotGCStorage'
+THUMBNAIL_DEFAULT_STORAGE = 'app.dictionary.gc-storage.OwlBotGCStorage'
 GS_BUCKET_NAME = 'media.owlbot.info'
 GS_PROJECT_ID = os.getenv('PROJECT_ID', '')
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
     '/secrets/service-account.json')
-
+GS_CUSTOM_DOMAIN = 'https://media.owlbot.info'
 STATIC_URL = '/static/'
 MEDIA_URL = 'https://media.owlbot.info/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
