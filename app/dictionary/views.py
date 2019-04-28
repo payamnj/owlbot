@@ -1,8 +1,11 @@
+from django.db.models import Count
 from django.http.response import HttpResponseRedirectBase
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic import View
+from django.views.generic import View, TemplateView
 from app.dictionary import models
 from app.dictionary import serializers
 import random
@@ -53,23 +56,33 @@ class HttpResponseRedirectTemp(HttpResponseRedirectBase):
     status_code = 307
 
 
-class Home(View):
+class Home(TemplateView):
+    template_name = 'home.html'
 
-    def get(self, request):
-        try:
-            rand_num = random.randint(0, 100744)
-            rand_word = models.Word.objects.all()[rand_num]
-            url = '/api/v2/dictionary/{}'.format(rand_word.word)
-            return HttpResponseRedirectTemp(url)
-        except Exception as e:
-            logging.exception(str(e))
-            raise e
+    def get_context_data(self, **kwargs):
+        context = super(Home, self).get_context_data(**kwargs)
+        words = models.Word.objects.annotate(count=Count('definition')).filter(count__lte=2, definition__image_approved=True)
+        rand_num = random.randint(0, 50)
+        rand_word = words[rand_num]
+        defenitions = models.Defenition.objects.filter(word=rand_word)
+        renderer = JSONRenderer()
+        context['response'] = renderer.render(serializers.DictionarySerializer(
+            {'word': rand_word.word, 'pronunciation': defenitions.first().word.pronunciation,
+             'definitions': list(defenitions)}).data).decode()
+
+        return context
+
 
 
 class DefinitionApi(APIView, GA):
 
+    def dispatch(self, request, *args, **kwargs):
+        if kwargs['version'] == 'v3':
+            self.permission_classes = (IsAuthenticated,)
+        return super(DefinitionApi, self).dispatch(request, *args, **kwargs)
+
     def get_serializer_class(self):
-        if '/v1/' in self.request.path:
+        if self.kwargs['version'] == 'v1':
             return serializers.DefenitionSerializer
         return serializers.DefinitionSerializer
 
@@ -79,8 +92,7 @@ class DefinitionApi(APIView, GA):
                 'word__word': kwargs['word'],
                 'published': True
             })
-            if request.user.is_authenticated:
-
+            if kwargs['version'] == 'v3':
                 serializer = serializers.DictionarySerializer(
                     {'word': kwargs['word'], 'pronunciation': defenitions.first().word.pronunciation,
                      'definitions': list(defenitions)})

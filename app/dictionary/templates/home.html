@@ -1,0 +1,49 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+    <style>
+      a {
+        color: #43c0c3;
+      }
+      a:hover{
+        color: #3b8184;
+      }
+    </style>
+    <title>Owlbot API 🦉🤖</title>
+  </head>
+  <body style="background-image: url({% static 'dictionary/img/bg.jpg' %}); background-size: cover;">
+    <div class="container">
+      <div class="row">
+        <img src="{% static 'dictionary/img/owlbot.png' %}" style="margin: auto; max-width: 60%; width: 170px; margin-bottom: 35px;"/>
+      </div>
+      <div class="row">
+        <div class="col-sm-10 offset-sm-1" style="color: #ffffff; font-size: 14px; background-color: #171717ba; padding: 7px;border-radius: 5px 5px 0 0;">Sample request and response:</div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10 offset-sm-1" style="font-family: 'Ubuntu Mono', monospace; background-color: #171717; padding: 35px 35px 0; border-radius: 0 0 5px 5px; color: #d0cece">
+          <b><span style="color: #87ff00">developer@V.I.K.I</span></b><span style="color: white">:</span><b><span style="color: #00afff">~</span></b>$
+          curl --header "Authorization: Token &#x3C;YOUR_TOKEN&#x3E;" https://owlbot.info/api/v3/dictionary/<span class="word-text"></span> -s | json_pp<br />
+          <pre id="response-container" style="color: #d0cece;"></pre>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10 offset-sm-1" style="    color: #ffffff;font-size: 14px; background-color: #171717ba; padding: 7px; border-radius: 5px; margin-top: 10px;">
+          Background Photo by <a href="https://instagram.com/serjosoza" target="_blank">sergio souza</a> from Pexels.</div>
+      </div>
+    </div>
+    <script>
+      var json_obj = {{ response | safe }};
+      console.log(json_obj);
+
+      var json_response = JSON.stringify(json_obj, null, 2);
+      Array.from(document.getElementsByClassName('word-text')).forEach(function(el){ el.innerHTML = json_obj.word;});
+      document.getElementById('response-container').innerHTML = json_response;
+    </script>
+  </body>
+</html>
