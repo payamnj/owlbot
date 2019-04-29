@@ -11,8 +11,15 @@
   </head>
   <body>
     <div class="container">
+      <div>
+        <img src="{% static 'dictionary/img/owlbot.png' %}" style="margin: auto; max-width: 60%; width: 170px; display: block"/>
+      </div>
       <div class="row">
-        <img src="{% static 'dictionary/img/owlbot.png' %}" style="margin: auto; max-width: 60%; width: 170px; margin-bottom: 35px;"/>
+        <div class="col-sm-10 offset-sm-1">
+          <h3 class="word-text"></h3>
+          <span class="pronunciation-text" style="color: #808080;"></span>
+          <div id="definitions-container"></div>
+        </div>
       </div>
       <div class="row">
         <div class="col-sm-10 offset-sm-1" style="color: #ffffff; font-size: 14px; background-color: #171717ba; padding: 7px;border-radius: 5px 5px 0 0;">Sample request and response:</div>
@@ -31,7 +38,42 @@
 
       var json_response = JSON.stringify(json_obj, null, 2);
       Array.from(document.getElementsByClassName('word-text')).forEach(function(el){ el.innerHTML = json_obj.word;});
+      if(json_obj.pronunciation){
+        Array.from(document.getElementsByClassName('pronunciation-text')).forEach(function(el){ el.innerHTML = '/'+json_obj.pronunciation+'/';});
+      }
       document.getElementById('response-container').innerHTML = json_response;
+      json_obj.definitions.forEach(function(el){
+        var def_row = document.createElement('div');
+        def_row.className = "row"
+        def_row.setAttribute('style', 'border-top: solid 1px #dedede; padding: 10px 0');
+        var def_texts = document.createElement('div');
+        def_texts.className = "col-sm-9 my-auto";
+        var type = document.createElement('i')
+        type.append(el.type);
+        def_texts.append(type);
+        var line_break = document.createElement('br');
+        def_texts.append(line_break);
+        def_texts.append(el.definition);
+        if(el.example){
+          var line_break = document.createElement('br');
+          def_texts.append(line_break);
+          var example = document.createElement('span');
+          example.setAttribute('style', 'color: #808080; font-size: 14px;');
+          example.innerHTML = "\""+el.example+"\"";
+          def_texts.append(example);
+        }
+        var def_photo = document.createElement('div');
+        def_photo.className = "col-sm-3 text-right"
+        if(el.image_url){
+          var img = document.createElement('img');
+          img.setAttribute('src', el.image_url);
+          img.setAttribute('style', 'width: 110px; max-width: 100%; border-radius: 55px; border: solid 1px #dedede')
+          def_photo.append(img);
+        }
+        def_row.append(def_texts);
+        def_row.append(def_photo);
+        document.getElementById('definitions-container').append(def_row);
+      });
     </script>
   </body>
 </html>

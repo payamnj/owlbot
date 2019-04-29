@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from image_cropping.utils import get_backend
 from app.dictionary import models
 
 
@@ -27,8 +27,17 @@ class EnrichedDefinitionSerializer(DefinitionSerializer):
     image_url = serializers.SerializerMethodField(required=False)
 
     def get_image_url(self, obj):
-        if obj.image:
-            return 'https://media.owlbot.info/{}'.format(obj.image.name)
+        if obj.image and obj.image_approved:
+            url = get_backend().get_thumbnail_url(
+                obj.image,
+                {
+                    'size': (400, 400),
+                    'box': obj.cropping,
+                    'crop': True,
+                    'detail': True,
+                }
+            )
+            return url
         else:
             return None
 

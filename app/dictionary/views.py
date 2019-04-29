@@ -1,11 +1,12 @@
 from django.db.models import Count
 from django.http.response import HttpResponseRedirectBase
+from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
+from rest_framework.renderers import JSONRenderer
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic import View, TemplateView
+from django.views.generic import TemplateView
 from app.dictionary import models
 from app.dictionary import serializers
 import random
@@ -61,10 +62,14 @@ class Home(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(Home, self).get_context_data(**kwargs)
-        words = models.Word.objects.annotate(count=Count('definition')).filter(count__lte=2, definition__image_approved=True)
-        rand_num = random.randint(0, 50)
-        rand_word = words[rand_num]
-        defenitions = models.Defenition.objects.filter(word=rand_word)
+        if not self.request.GET.get('q'):
+            words = models.Word.objects.annotate(count=Count('definition')).filter(count__lte=5, definition__image_approved=True)
+            rand_num = random.randint(0, words.count())
+            rand_word = words[rand_num]
+        else:
+            rand_word = get_object_or_404(models.Word.objects.filter(word=self.request.GET.get('q')).distinct(), definition__published=True)
+
+        defenitions = models.Defenition.objects.filter(word=rand_word, published=True)
         renderer = JSONRenderer()
         context['response'] = renderer.render(serializers.DictionarySerializer(
             {'word': rand_word.word, 'pronunciation': defenitions.first().word.pronunciation,
