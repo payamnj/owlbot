@@ -7,6 +7,8 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <title>Owlbot API 🦉🤖</title>
   </head>
   <body>
@@ -26,16 +28,49 @@
       </div>
       <div class="row">
         <div class="col-sm-10 offset-sm-1" style="font-family: 'Ubuntu Mono', monospace; background-color: #171717; padding: 35px 35px 0; border-radius: 0 0 5px 5px; color: #d0cece">
-          <b><span style="color: #87ff00">developer@V.I.K.I</span></b><span style="color: white">:</span><b><span style="color: #00afff">~</span></b>$
-          curl --header "Authorization: Token &#x3C;YOUR_TOKEN&#x3E;" https://owlbot.info/api/v3/dictionary/<span class="word-text"></span> -s | json_pp<br />
-          <pre id="response-container" style="color: #d0cece;"></pre>
+          <b><span style="color: #87ff00">developer@V.I.K.I</span></b><span style="color: white">:</span><b><span style="color: #00afff;">~</span></b>$
+          curl --header "Authorization: Token <a data-toggle="modal" data-target="#myModal" style="color: #4cc0c3; cursor: pointer;">&#x3C;YOUR_TOKEN&#x3E;</a>" https://owlbot.info/api/v3/dictionary/<span class="word-text"></span> -s | json_pp<br />
+          <pre id="response-container" style="color: #d0cece; background: none; border: none;"></pre>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10 offset-sm-1 text-center" style="padding: 25px">
+          <button class="btn btn-info" data-toggle="modal" data-target="#myModal">
+          GET A FREE TOKEN
+          </button>
+        </div>
+      </div>
+    </div>
+    <div>
+
+      <!-- The Modal -->
+      <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Register for a free Token</h4>
+              <button type="button" class="close" id="modal-close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <div class="input-group mb-3">
+                <input type="email" class="form-control" placeholder="Enter your email address" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" id="register-btn">Register</button>
+                </div>
+              </div>
+              <div id="response-result" style="color: #6d6d6d; font-size: 13px;"></div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
     <script>
       var json_obj = {{ response | safe }};
-      console.log(json_obj);
-
       var json_response = JSON.stringify(json_obj, null, 2);
       Array.from(document.getElementsByClassName('word-text')).forEach(function(el){ el.innerHTML = json_obj.word;});
       if(json_obj.pronunciation){
@@ -74,6 +109,40 @@
         def_row.append(def_photo);
         document.getElementById('definitions-container').append(def_row);
       });
+      $('#modal-close').click(function(){
+         $('#response-result').html('');
+         $('input[type=email]')[0].value = '';
+      });
+      var get_token = function(){
+        var email = $('input[type=email]')[0].value;
+        if(email){
+          $('#response-result').html('<div class="spinner-border text-secondary" role="status" style="height:25px; width:25px; margin: auto; opacity: 0.2;"><span class="sr-only">Loading...</span></div>');
+          $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/api/v3/get_token ",
+            data: "email=" + email,
+            complete: function(data) {
+              $('#response-result').html(data.responseJSON[0].message);
+            }
+          });
+        }
+      }
+      $('#register-btn').click(function(){get_token();});
+      $('input[type=email]').keypress(function(e){
+        if(e.which == 13) {
+          get_token();
+        }
+      });
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-80200867-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-80200867-1');
     </script>
   </body>
 </html>

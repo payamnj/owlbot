@@ -164,6 +164,7 @@
     - migrate
 
 - name: Run Django collectstatic
+  become: "{{ application_user }}"
   shell: . {{ virtualenv_path }}/bin/activate
          && . {{ virtualenv_path }}/bin/postactivate
          && cd {{ django_dir }}

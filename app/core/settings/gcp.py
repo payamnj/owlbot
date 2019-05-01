@@ -1,8 +1,12 @@
 from .settings import *
 from .utils import get_env_variable
+import sentry_sdk
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_env_variable('DJANGO_SECRET_KEY')
+
+sentry_sdk.init(
+    "https://{}@sentry.io/{}".format(os.getenv('SENTRY_PUBLIC_KEY'), os.getenv('SENTRY_PROJECT_ID')))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False

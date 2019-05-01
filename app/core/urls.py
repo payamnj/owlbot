@@ -8,6 +8,9 @@ api_urlpatterns = [
     url(r'^dictionary/(?P<word>[\w\d ]+)/?$',
         dictionary_views.DefinitionApi.as_view(),
         name='definition_api'),
+    url(r'^get_token$',
+        dictionary_views.GetToken.as_view(),
+        name='get_token')
 ]
 
 

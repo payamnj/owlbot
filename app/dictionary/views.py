@@ -1,12 +1,22 @@
+import re
+
+from django.contrib.auth.models import User
 from django.db.models import Count
 from django.http.response import HttpResponseRedirectBase
 from django.shortcuts import get_object_or_404
+from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
+from django.views.decorators.csrf import csrf_protect
+from django.conf import settings
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
 from app.dictionary import models
 from app.dictionary import serializers
 import random
@@ -63,11 +73,13 @@ class Home(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(Home, self).get_context_data(**kwargs)
         if not self.request.GET.get('q'):
-            words = models.Word.objects.annotate(count=Count('definition')).filter(count__lte=5, definition__image_approved=True)
+            words = models.Word.objects.annotate(count=Count('definition')).filter(count__lte=5,
+                                                                                   definition__image_approved=True)
             rand_num = random.randint(0, words.count())
             rand_word = words[rand_num]
         else:
-            rand_word = get_object_or_404(models.Word.objects.filter(word=self.request.GET.get('q')).distinct(), definition__published=True)
+            rand_word = get_object_or_404(models.Word.objects.filter(word=self.request.GET.get('q')).distinct(),
+                                          definition__published=True)
 
         defenitions = models.Defenition.objects.filter(word=rand_word, published=True)
         renderer = JSONRenderer()
@@ -76,7 +88,6 @@ class Home(TemplateView):
              'definitions': list(defenitions)}).data).decode()
 
         return context
-
 
 
 class DefinitionApi(APIView, GA):
@@ -114,3 +125,41 @@ class DefinitionApi(APIView, GA):
         except Exception as e:
             logging.exception(str(e), extra={'word': kwargs.get('word')})
             raise e
+
+
+class GetToken(APIView, GA):
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        user, created = User.objects.get_or_create(email=email, defaults={'username': email})
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            return Response([{'message': 'Invalid email address'}], status=400)
+        if not created:
+            return Response([{'message': 'email address is already registered.'}], status=409)
+        token = Token.objects.create(user=user)
+        response = send_email(email, 'OWLBOT API Token',
+                              '<div class=\'line-height: 25px;\'>Hey,<br/>We are glad that you have decided to use the OwlBot API.<br />'
+                              'Your API token is: <b>{token}</b><br /><br />Here is a sample curl request for you: <br />'
+                              '<div style=\'background-color: #353c44; color: #e0e0e0; margin: 14px 0; padding: 10px; border-radius: 4px\'>'
+                              'curl --header "Authorization: Token {token}" https:<span>//owlbot</span>.<span>info</span>/api/v3/dictionary/owl -s | json_pp'
+                              '</div>'
+                              'Good Luck 🦉'
+                              '</div>'.format(token=token.key))
+        if response.status_code == 202:
+            return Response([{'message': '👍 Token has been sent to the email address'}], status=202)
+        else:
+            user.delete()
+            token.delete()
+            return Response([{'message': 'Error on sending the email. Please try again later.'}])
+
+
+def send_email(email, subject, content):
+    message = Mail(
+        from_email='owlbot@owlbot.info',
+        to_emails=email,
+        subject=subject,
+        html_content=content)
+
+    sg = SendGridAPIClient(settings.SENDGRID_API_TOKEN)
+    response = sg.send(message)
+    return response
