@@ -135,9 +135,9 @@ class GetToken(APIView, GA):
 
     def post(self, request, *args, **kwargs):
         email = request.data.get('email')
-        user, created = User.objects.get_or_create(email=email, defaults={'username': email})
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
             return Response([{'message': 'Invalid email address'}], status=400)
+        user, created = User.objects.get_or_create(email=email, defaults={'username': email})
         if not created:
             return Response([{'message': 'email address is already registered.'}], status=409)
         token = Token.objects.create(user=user)
