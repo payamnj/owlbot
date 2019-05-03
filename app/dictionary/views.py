@@ -129,6 +129,10 @@ class DefinitionApi(APIView, GA):
 
 class GetToken(APIView, GA):
 
+    @method_decorator(csrf_protect)
+    def dispatch(self, request, *args, **kwargs):
+        return super(GetToken, self).dispatch(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         email = request.data.get('email')
         user, created = User.objects.get_or_create(email=email, defaults={'username': email})

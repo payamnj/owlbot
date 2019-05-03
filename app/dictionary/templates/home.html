@@ -57,6 +57,7 @@
             <!-- Modal body -->
             <div class="modal-body">
               <div class="input-group mb-3">
+                {% csrf_token %}
                 <input type="email" class="form-control" placeholder="Enter your email address" aria-label="Recipient's username" aria-describedby="basic-addon2">
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary" type="button" id="register-btn">Register</button>
@@ -117,13 +118,19 @@
         var email = $('input[type=email]')[0].value;
         if(email){
           $('#response-result').html('<div class="spinner-border text-secondary" role="status" style="height:25px; width:25px; margin: auto; opacity: 0.2;"><span class="sr-only">Loading...</span></div>');
+          var csrftoken = $("[name=csrfmiddlewaretoken]").val();
           $.ajax({
             type: "POST",
             dataType: "json",
             url: "/api/v3/get_token ",
             data: "email=" + email,
+            beforeSend: function(xhr){xhr.setRequestHeader('X-CSRFToken', csrftoken);},
             complete: function(data) {
-              $('#response-result').html(data.responseJSON[0].message);
+              try {
+                $('#response-result').html(data.responseJSON[0].message);
+              } catch(error) {
+                $('#response-result').html('Something went wrong 🙁');
+              }
             }
           });
         }
