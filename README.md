@@ -1,6 +1,7 @@
 # OwlBot🦉🤖
 
-OwlBot is a free HTTP API for English vocabularies' definitions.
+This is the source code of the OWLBot website.
+OwlBot is a free HTTP API for English vocabularies' definitions and it is powered by the <a href='https://www.djangoproject.com/'>Django framework</a>.
 
 API URL: `https://owlbot.info/api/v3/dictionary/<word>`
 
