@@ -108,6 +108,9 @@ class DefinitionApi(APIView, GA):
                 'word__word': kwargs['word'],
                 'published': True
             })
+            if not defenitions.count():
+                return Response([{
+                    'message': 'No definition :('}], status=404)
             if kwargs['version'] == 'v3':
                 serializer = serializers.DictionarySerializer(
                     {'word': kwargs['word'], 'pronunciation': defenitions.first().word.pronunciation,
