@@ -17,5 +17,6 @@ api_urlpatterns = [
 urlpatterns = [
     path('joghdadmin/', admin.site.urls),
     url(r'^$', dictionary_views.Home.as_view()),
-    url(r'^api/(?P<version>v[123])/', include(api_urlpatterns))
+    url(r'^api/(?P<version>v[123])/', include(api_urlpatterns)),
+    path('unsubscribe_from_koalas_mail_list/', dictionary_views.KoalasUnsubscribe.as_view())
 ]

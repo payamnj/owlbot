@@ -67,6 +67,10 @@ class HttpResponseRedirectTemp(HttpResponseRedirectBase):
     status_code = 307
 
 
+class KoalasUnsubscribe(TemplateView):
+    template_name = 'unsubscribe.html'
+
+
 class Home(TemplateView):
     template_name = 'home.html'
 
