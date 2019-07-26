@@ -1,6 +1,0 @@
-[program:{{ application_name }}]
-command = {{ virtualenv_path }}/bin/uwsgi_start
-user = {{ application_user }}
-stdout_logfile = {{ application_log_dir }}/supervisord/uwsgi_supervisor.log
-redirect_stderr = true
-killasgroup = true

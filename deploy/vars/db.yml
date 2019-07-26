@@ -1,6 +1,0 @@
----
-
-#db_host: 'localhost'
-#postgresql_version: 9.6
-
-...
